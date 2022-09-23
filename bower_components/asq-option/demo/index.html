@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="asq-elements" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  <title>asq-option | Demo</title>
+
+  <script src="../../webcomponentsjs/webcomponents.js"></script>
+
+  <link href="../asq-option.html" rel="import">
+
+  <style is="custom-style">
+    asq-option {
+      display: block;
+      margin-bottom: 1em;
+    }
+
+    body div {
+      margin-left: 100px;
+    }
+
+    asq-option.blue {
+      --asq-option-presenter-progress-active-color: var(--paper-light-blue-500);
+    }
+
+    asq-option.red {
+      --asq-option-presenter-progress-active-color: var(--paper-red-500);
+    }
+
+    asq-option {
+      --asq-option-viewer-unchecked-ink-color: #FF1744;
+      --asq-option-viewer-checked-ink-color: #2E7D32;
+      --asq-option-viewer-checked-color: black;
+      --asq-option-viewer-unchecked-color: green;
+      --asq-option-viewer-unchecked-background-color: white;
+      --asq-option-viewer-checkmark-color: white;
+    }
+
+    asq-option[name="o1"] {
+      --asq-option-viewer-checked-color: black;
+      --asq-option-viewer-unchecked-color: black;
+    }
+  </style>
+
+    
+
+</head>
+<body unresolved>
+
+  <div>
+    <asq-option multi name="o0">A checkbox option for viewer</asq-option>
+    <asq-option multi name="o1" checked>Another checkbox option.</asq-option>
+    <asq-option multi name="o2" checked disabled>A disabled checkbox option</asq-option>
+
+    <asq-option name="o3" checked>A radio option</asq-option>
+    <asq-option name="o4" disabled>A diabled radio option</asq-option>
+
+    <asq-option class="blue" role="presenter" progress-value="5" progress-max="15">An option for presenter</asq-option>
+    <asq-option multi class="red" role="presenter" progress-value="10" progress-max="15">Another option for presenter</asq-option>
+  </div>
+  
+
+  
+
+  <script>
+    var x = document.querySelectorAll('asq-option')[0];
+    
+
+
+    window.onmessage = function(e){
+
+      if (typeof e.data.role == "string" && e.data.role.length > 0) {
+        var allAsqElements = document.querySelectorAll('html /deep/ *');
+        allAsqElements = Array.prototype.slice.call(allAsqElements).filter(function(el) {
+          return el.isASQElement;
+          // return isASQEl(el);
+        });
+
+        //set role for every asq-element in this page
+        allAsqElements.forEach(function(elem, index) {
+          elem.role = e.data.role;
+        });
+      }
+
+    };
+
+
+  </script>
+
+
+</body>
+</html>

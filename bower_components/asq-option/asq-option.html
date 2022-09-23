@@ -1,0 +1,150 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../asq-base/asq-base.html">
+<link rel="import" href="../paper-ripple/paper-ripple.html">
+<link rel="import" href="../paper-styles/default-theme.html">
+<link rel="import" href="../paper-behaviors/paper-inky-focus-behavior.html">
+<link rel="import" href="../paper-progress/paper-progress.html">
+<!-- <link rel="import" href="../paper-behaviors/paper-checked-element-behavior.html"> -->
+
+
+
+<link rel="import" href="./elements/asq-option-viewer/asq-option-viewer.html">
+<link rel="import" href="./elements/asq-option-presenter/asq-option-presenter.html">
+
+<!--
+`asq-option` represents a single option of `asq-multi-choice-q` question.
+
+In viewer's view, `asq-option` can switch between radio button and checkbox according
+to the value of `multi`.
+
+In presenter's view, it will show a progress bar instead.
+
+
+
+@element asq-option
+@demo demo/index.html
+@group ASQ Elements
+@blurb Element acting as options in multichoice questions.
+@homepage http://github.com/ASQ-USI-Elements/asq-option
+-->
+<dom-module id="asq-option">
+
+
+  <template>
+
+    <template is="dom-if" if="{{hasRole(role, roles.VIEWER)}}" restamp>
+      <asq-option-viewer
+        role="viewer"
+        uid="[[uid]]"
+        multi="{{multi}}"
+        disabled="{{disabled}}"
+        name$="{{name}}"
+        checked$="{{checked}}">
+        <content></content>
+      </asq-option-viewer>
+    </template>
+
+
+
+    <template is="dom-if" if="{{hasRole(role, roles.PRESENTER)}}" restamp>
+      <asq-option-presenter
+        role="presenter"
+        uid="[[uid]]"
+        multi="{{multi}}"
+        name$="{{name}}"
+        disabled="{{disable}}]"
+        progress-value="{{progressValue}}"
+        progress-max="{{progressMax}}"
+        display-progress="[[displayProgress]]">
+        <content></content>
+      </asq-option-presenter>
+    </template>
+
+  </template>
+
+
+
+
+  <script>
+    Polymer({
+      is: 'asq-option',
+
+      behaviors: [
+        ASQ.asqElementBehavior
+      ],
+
+
+
+      properties: {
+        /**
+         * Decide the mode, single or multi.
+         */
+        multi: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          reflectToAttribute: true
+        },
+
+        /**
+         * To set the value of progress bar in presenter view.
+         */
+         progressValue: {
+          type: Number,
+          value: 0,
+          notify: true,
+          reflectToAttribute: true
+        },
+
+        /**
+         * To set the max value of progress bar in presenter view.
+         */
+        progressMax: {
+          type: Number,
+          value: 100,
+          notify: true,
+          reflectToAttribute: true
+        },
+
+        /**
+        * Whether to display progress or not. Works only for `presenter` role.
+        * @type {Object}
+        */
+        displayProgress: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+
+        checked: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          reflectToAttribute: true
+        },
+
+        /**
+        *  @type {String}
+        */
+        name: {
+          type : String,
+          notify: true,
+          reflectToAttribute: true
+        }
+      },
+
+
+
+      attached: function() {
+        this._isReady = true;
+
+        this.async(function() {
+          this.fire('asq-option-ready');
+        });
+      },
+
+
+    })
+  </script>
+
+</dom-module>

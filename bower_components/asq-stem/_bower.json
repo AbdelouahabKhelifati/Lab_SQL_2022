@@ -1,0 +1,30 @@
+{
+  "name": "asq-stem",
+  "homepage": "https://github.com/ASQ-USI-Elements/asq-stem",
+  "authors": [
+    "Vasileios Triglianos <triglian@gmail.com>",
+    "Zhenfei Nie <youyis2fox@gmail.com>"
+  ],
+  "description": "ASQ Stem element.",
+  "keywords": [
+    "ASQ"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.2.1",
+    "asq-base": "ASQ-USI-Elements/asq-base#master"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.1.4",
+    "web-component-tester": "Polymer/web-component-tester#^4.2.0"
+  },
+  "_release": "ca39955935",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "ca39955935d981cb050e28141a5d8c5dc2445fec"
+  },
+  "_source": "git://github.com/ASQ-USI-Elements/asq-stem.git",
+  "_target": "master",
+  "_originalSource": "ASQ-USI-Elements/asq-stem"
+}

@@ -1,0 +1,40 @@
+{
+  "name": "asq-canvas",
+  "homepage": "https://github.com/ASQ-USI-Elements/asq-canvas",
+  "authors": [
+    "Vasileios Triglianos <triglian@gmail.com>",
+    "Zhenfei Nie <youyis2fox@gmail.com>"
+  ],
+  "description": "ASQ canvas element to shares what the presenter is drawing on the screen with the viewers",
+  "keywords": [
+    "ASQ"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "asq-base": "ASQ-USI-Elements/asq-base#master",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.3.1",
+    "polymer": "Polymer/Polymer#^1.4.0"
+  },
+  "ignore": [
+    "index.js",
+    "lib",
+    "package.json",
+    "node_modules",
+    ".npmignore",
+    ".gitignore",
+    "test/server"
+  ],
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.1.4",
+    "web-component-tester": "Polymer/web-component-tester#^4.2.0"
+  },
+  "_release": "9c6ab3d1a2",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "9c6ab3d1a24e766d03ddf4275416c42b758c78bc"
+  },
+  "_source": "git://github.com/asq-usi-elements/asq-canvas.git",
+  "_target": "master",
+  "_originalSource": "asq-usi-elements/asq-canvas"
+}

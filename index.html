@@ -1,0 +1,500 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1024" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>Big Data Infrastructures - SQL Review</title>
+
+    <meta name="description" content="This is a basic sample presentation showing the featues of ASQ" />
+    <meta name="author" content="Max von Bülow, Vasileios Triglianos" />
+
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700' rel='stylesheet' type='text/css'>
+
+    <link href="css/ASQBasicImpress.css" type="text/css" rel="stylesheet"/>
+    <link href="css/rainbow.min.css" type="text/css" rel="stylesheet"/>
+
+
+    <script>
+      // Setup Polymer options
+      window.Polymer = {
+        dom: 'shadow',
+        lazyRegister: true
+      };
+
+      // Load webcomponentsjs polyfill if browser does not support native Web Components
+      (function() {
+        'use strict';
+
+        var onload = function() {
+          // For native Imports, manually fire WebComponentsReady so user code
+          // can use the same code path for native and polyfill'd imports.
+          if (!window.HTMLImports) {
+            document.dispatchEvent(
+              new CustomEvent('WebComponentsReady', {bubbles: true})
+            );
+          }
+        };
+
+        var webComponentsSupported = (
+          'registerElement' in document
+          && 'import' in document.createElement('link')
+          && 'content' in document.createElement('template')
+        );
+
+        if (!webComponentsSupported) {
+          var script = document.createElement('script');
+          script.async = true;
+          script.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
+          script.onload = onload;
+          document.head.appendChild(script);
+        } else {
+          onload();
+        }
+      })();
+    </script>
+
+    <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+    <link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout.html">
+    <link rel="import" href="bower_components/asq-elements/asq-elements.html">
+    <link rel="import" href="bower_components/asq-canvas/asq-canvas.html">
+
+    <link rel="import" href="shared-styles.html">
+    <style is="custom-style" include="shared-styles"></style>
+
+  </head>
+
+  <body class="impress-not-supported" data-asq-role="viewer">
+
+    <asq-canvas></asq-canvas>
+
+    <div class="fallback-message">
+      <p>
+        Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.
+      </p>
+      <p>
+        For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.
+      </p>
+    </div>
+    <asq-settings max-num-submissions="2" slideflow="ctrl" assessment="none"></asq-settings>
+
+    <div id="powered-by-asq">
+      Powered by <a href="http://asq.inf.usi.ch/" target="_blank">
+        <img src="img/asq.png" alt="asq" />
+      </a>
+    </div>
+
+    <div id="impress">
+
+
+      <section class="step" id="intro" data-x="0" data-y="0">
+        <h1>Simple SQL Review and PostgreSQL Installation </h1>
+        <h3>Big Data Infrastructure Course, SA 2022</h3>
+        <hr />
+        <h4> Abdelouahab Khelifati - <i><a href="mailto:abdel@exascale.info">abdel@exascale.info</a></i></h4>
+        <asq-welcome></asq-welcome>
+      </section>
+
+
+      <section class="step" id="preliminaries" data-x="2000" data-y="1000" data-z="1000">
+        <!-- <h1>Simple SQL</h1> -->
+        <asq-exercise max-num-submissions="-1" assessment="self">
+          <asq-stem><h2>Have you already followed any course on SQL?</h2></asq-stem>
+          <!-- <asq-multi-choice-q id="sql-course">
+            <asq-option name="op0">Yes</asq-option>
+            <asq-option name="op1">No</asq-option>
+          </asq-multi-choice-q> -->
+      </section>
+
+      <section class="step" id="organisation" data-x="4000" data-y="0" data-z="1000">
+        <h1>Outline of the Lab</h1>
+        <ul>
+          <li>Interactive class on SQL</li>
+          <li>Installation of PostgreSQL (I am here to help ;)</li>
+          <li>Homework: download handout from ILIAS</li>
+          <ul>
+            <li>Due for the October 4th, 23H55 </li>
+            <li>Contact me if you have doubts</li>
+            <li>Solution on ILIAS on October 5th</li>
+          </ul>
+        </ul>
+      </section>
+
+    <section class="step" id="sqloverview" data-x="4000" data-y="2000" data-z="2000">
+        <h1>SQL Overview</h1>
+        <ul>
+          <li>Structured Query Language</li>
+          <li>Designed for managing data held in a relational database management system (RDBMS)</li>
+          <li>Based upon Relational Algebra</li>
+          <li>The scope: Store, Manipulate and Retrieve data in databases</li>
+        </ul>
+      </section>
+
+
+      <section class="step" id="ddldml" data-x="6500" data-y="0" data-z="2000">
+        <h1>Simple SQL Review</h1>
+        <p>There are 4 types of languages in a Data Base Management System: DDL, DML, DCL, TCL.
+        </p>
+        <p>What do all those acronyms mean?
+        </p>        
+        <asq-exercise max-num-submissions="8">
+        <asq-text-input-q label="DDL, DML, DCL, TCL" id="text-q">
+          <asq-solution hidden>
+          DDL = Data Definition Language
+          DML = Data Manipulation Language
+          DCL = Data Control Language
+          TCL = Transaction Control Language
+        </asq-solution>
+        </asq-text-input-q>
+        </asq-exercise>
+      </section>
+
+    <section class="step" id="langs" data-x="9500" data-y="-2000" data-z="2000">
+        <h1>Statements in SQL</h1>
+              <ul>
+              <li>Data Definition Language: DDL statements are used to alter/modify a database or table structure and schema. These statements handle the design and storage of database objects.</li>
+              <li>Data Manipulation Language: These are basic operations we perform on data such as selecting a few records from a table, inserting new records, deleting unnecessary records, and updating/modifying existing records.</li>
+              <li>Data Control Language: DCL statements control the level of access that users have on database objects.</li>
+              <li>Transaction Control Language: TCL statements allow you to control and manage transactions to maintain the integrity of data within SQL statements.</li>
+              </ul>
+    </section>
+
+
+      <section class="step" id="ddldmlbuckets" data-x="12500" data-y="0" data-z="2000">
+      <asq-exercise class="container">
+        <asq-buckets-q role="viewer"
+          mode="1-15"
+          x-matchable="div[buckets]"
+          y-matchable="div[labels]"
+          attr-for-matched="s-name"
+          matched-attribute="matched"
+          matched-class="label-success">
+
+          <asq-stem><h4>Associate SQL commands to operation types.</h4></asq-stem>
+          <div buckets>
+            <div s-name="DDL" class="bucket"><b>Data Definition Language (DDL)</b></div>
+            <div s-name="DML" class="bucket"><b>Data Manipulation Language (DML)</b></div>
+            <div s-name="DCL" class="bucket"><b>Data Control Language (DCL)</b></div>
+            <div s-name="TCL" class="bucket"><b>Transaction Control Language (TCL)</b></div>
+          </div>
+
+          <div labels>
+            <div s-name="create"  class="label label-primary">CREATE</div>
+            <div s-name="grant"  class="label label-primary">GRANT</div>
+            <div s-name="commit"  class="label label-primary">COMMIT</div>
+            <div s-name="insert"  class="label label-primary">INSERT INTO</div>
+            <div s-name="delete"  class="label label-primary">DELETE</div>
+            <div s-name="revoke"  class="label label-primary">REVOKE</div>
+            <div s-name="rollback"  class="label label-primary">ROLLBACK</div>
+            <div s-name="explain"  class="label label-primary">EXPLAIN</div>
+            <div s-name="update"  class="label label-primary">UPDATE</div>
+            <div s-name="alter"  class="label label-primary">ALTER</div>
+            <div s-name="drop"  class="label label-primary">DROP</div>
+            <div s-name="select"  class="label label-primary">SELECT</div>
+          </div>
+        </asq-buckets-q>
+      </section>
+
+
+      <section class="step" id="ddl" data-x="15500" data-y="0" data-z="3000">
+        <h1>Important DDL Operations:</h1>
+        <ul>
+          <li><code>CREATE</code>: Create a new table, database, schema</li>
+          <li><code>ALTER</code>: Change the definition of an existing table</li>
+          <li><code>DROP</code>: Delete existing objects from database</li>
+        </ul>
+      </section>
+
+      <section class="step" id="createtable" data-x="18500" data-y="0" data-z="3000">
+        Suppose to have the following schema:<br/>
+
+        <code>supplier(<u>suppID</u>, name)</code><br/>
+        <code>product(<u>prodID</u>, name)</code><br/>
+        <code>component(<u>compID</u>, name)</code><br/>
+        <code>composed_by(<u>prodID, compID</u>, quantity)</code><br/>
+        <code>sells(<u>suppID, compID</u>, price)</code><br/>
+         <asq-exercise max-num-submissions="3" assessment="self">
+             <asq-code-q  theme="monokai" mode="sql" font-size="0.8em">
+               <asq-stem><h3>Create the table <em>composed_by</em></h3></asq-stem>
+                    <code>CREATE TABLE composed_by (
+                    ...-- mind foreign keys and referential actions
+                        );
+                    </code>
+             </asq-code-q>
+        </asq-exercise>
+      </section>
+
+
+
+      <section class="step" id="createtable-s" data-x="21500" data-y="0" data-z="3000">
+        <pre><code>CREATE TABLE composed_by (
+  prodID INTEGER,
+  compID INTEGER,
+  quantity NUMERIC DEFAULT 1 NOT NULL,
+  PRIMARY KEY(prodID, compID),
+  CHECK(quantity > 0),
+  FOREIGN KEY(prodID) REFERENCES product(prodID)
+    ON DELETE RESTRICT ON UPDATE CASCADE,
+  FOREIGN KEY(compID) REFERENCES component(compID)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+);</code></pre>
+      </section>
+
+    <section class="step" id="refer" data-x="21500" data-y="-2000" data-z="3000">
+        <h1>Referential actions</h1>
+              <ul>
+              <li>CASCADE: Whenever rows in the master (referenced) table are deleted (or updated), the respective rows of the child (referencing) table with a matching foreign key column will be deleted (or updated) as well.</li>
+              <li>RESTRICT: A value or a row cannot be updated or deleted when a row exists in a referencing or child table that references the value in the referenced table.</li>
+              <li>SET NULL, SET DEFAULT: The value of the affected referencing attributes is changed to NULL for SET NULL, and to the specified default value for SET DEFAULT.</li>
+              </ul>
+    </section>
+
+    <section class="step" id="dml" data-x="24500" data-y="0" data-z="3000">
+        <h1>Important DML Operations:</h1>
+        <ul>
+          <li><code class="sql"> SELECT</code>: Select records from a table</li>
+          <li><code>INSERT</code>: Insert new records</li>
+          <li><code>UPDATE</code>: Update/Modify existing records</li>
+          <li><code>DELETE</code>: Delete existing records</li>
+        </ul>
+      </section>
+
+
+      <section class="step" id="dml_code" data-x="27500" data-y="1500" data-z="4000">
+        <h1>Data Manipulation Operations</h1>
+        <ul>
+        <pre><code>INSERT INTO supplier (suppID, name)
+VALUES (0, 'abdle'), (1, 'philippe');
+
+UPDATE supplier SET name = 'abdel'
+WHERE suppID = 0;
+
+DELETE FROM supplier
+WHERE name = 'philippe' OR suppID = 0;
+
+SELECT * FROM supplier;</code></pre>
+
+        <p>You can complicate each of them as much as you want (e.g. nested queries).</p>
+
+      </section>
+
+          <section class="step" id="postgresInstall" data-x="27500" data-y="5000" data-z="5000">
+          <h1>PostgreSQL Installation</h1>
+          <ul>
+            <li>If you have a Mac: <a href="http://postgresapp.com/">http://postgresapp.com/</a></li>
+            <li>If you are using Linux use Yum, apt-get, emerge, etc.</li>
+            <li>Otherwise use the official website <a href="http://www.postgresql.org/download/">http://www.postgresql.org/download/</a> </li>
+            <li>Here to help if you have troubles ;-)</li>
+          </ul>
+      </section>
+
+
+      <section class="step" id="sqlgym" data-x="27500" data-y="6000" data-z="5000">
+        <h1>SQL Gym</h1>
+        <h2><i>Warm-up your mind and get ready!</i></h2>
+      </section>
+
+      <section class="step" id="sql1" data-x="30500" data-y="3000" data-z="4000">
+        <code>supplier(<u>suppID</u>, name)</code><br/>
+        <code>product(<u>prodID</u>, name)</code><br/>
+        <code>component(<u>compID</u>, name)</code><br/>
+        <code>composed_by(<u>prodID, compID</u>, quantity)</code><br/>
+        <code>sells(<u>suppID, compID</u>, price)</code><br/>
+
+
+         <asq-exercise max-num-submissions="3" assessment="self">
+             <asq-code-q  theme="monokai" mode="sql" font-size="0.8em">
+               <asq-stem><p>Get the ID of all products who has the letter 'c' in the middle.</p></asq-stem>
+<code>SELECT ...
+FROM ...
+WHERE ... LIKE ...;
+</code>
+             </asq-code-q>
+        </asq-exercise>
+      </section>
+
+      <section class="step" id="sql1_s" data-x="33500" data-y="4000" data-z="4000">
+        <code>supplier(<u>suppID</u>, name)</code><br/>
+        <code>product(<u>prodID</u>, name)</code><br/>
+        <code>component(<u>compID</u>, name)</code><br/>
+        <code>composed_by(<u>prodID, compID</u>, quantity)</code><br/>
+        <code>sells(<u>suppID, compID</u>, price)</code><br/>
+
+        <pre style="color: blue;"><code class="sql">SELECT prodID
+FROM product
+WHERE name LIKE '%c%';</code></pre>
+      </section>
+
+
+      <section class="step" id="sql2" data-x="36500" data-y="3000" data-z="4000">
+        <code>supplier(<u>suppID</u>, name)</code><br/>
+        <code>product(<u>prodID</u>, name)</code><br/>
+        <code>component(<u>compID</u>, name)</code><br/>
+        <code>composed_by(<u>prodID, compID</u>, quantity)</code><br/>
+        <code>sells(<u>suppID, compID</u>, price)</code><br/>
+
+
+         <asq-exercise max-num-submissions="3" assessment="self">
+             <asq-code-q  theme="monokai" mode="sql" font-size="0.8em">
+               <asq-stem><p>Get the names of all products composed by at least two copies of the component called 'tomato'.</p></asq-stem>
+<code>SELECT ...
+FROM ...
+WHERE ...;
+</code>
+             </asq-code-q>
+        </asq-exercise>
+      </section>
+
+      <section class="step" id="sql2_s" data-x="39500" data-y="4000" data-z="4000">
+        <code>supplier(<u>suppID</u>, name)</code><br/>
+        <code>product(<u>prodID</u>, name)</code><br/>
+        <code>component(<u>compID</u>, name)</code><br/>
+        <code>composed_by(<u>prodID, compID</u>, quantity)</code><br/>
+        <code>sells(<u>suppID, compID</u>, price)</code><br/>
+
+        <pre  style="color: blue;"><code class="sql">SELECT product.name
+FROM product
+  JOIN composed_by
+    ON product.prodID = composed_by.prodID
+  JOIN component
+    ON component.compID = composed_by.compID
+WHERE component.name = 'tomato'
+AND composed_by.quantity >= 2;</code></pre>
+      </section>
+
+
+      <section class="step" id="sql3" data-x="42500" data-y="3000" data-z="4000">
+        <code>supplier(<u>suppID</u>, name)</code><br/>
+        <code>product(<u>prodID</u>, name)</code><br/>
+        <code>component(<u>compID</u>, name)</code><br/>
+        <code>composed_by(<u>prodID, compID</u>, quantity)</code><br/>
+        <code>sells(<u>suppID, compID</u>, price)</code><br/>
+
+        <asq-exercise max-num-submissions="3" assessment="self">
+             <asq-code-q  theme="monokai" mode="sql" font-size="0.8em">
+               <asq-stem><p>Show the histogram of the prices of the components sold by "NERV", i.e., count how many products are sold by NERV for each price, ordered by decreasing price.</p></asq-stem>
+<code>SELECT ...
+FROM ...
+WHERE ...
+GROUP BY ...
+ORDER BY... ;
+</code>
+             </asq-code-q>
+        </asq-exercise>
+      </section>
+
+      <section class="step" id="sql3_s" data-x="45500" data-y="4000" data-z="4000">
+        <code>supplier(<u>suppID</u>, name)</code><br/>
+        <code>product(<u>prodID</u>, name)</code><br/>
+        <code>component(<u>compID</u>, name)</code><br/>
+        <code>composed_by(<u>prodID, compID</u>, quantity)</code><br/>
+        <code>sells(<u>suppID, compID</u>, price)</code><br/>
+
+        <pre style="color: blue;"><code class="sql">SELECT sells.price, count(*) AS cnt
+FROM sells JOIN supplier
+  ON sells.suppID = supplier.suppID
+WHERE supplier.name = 'NERV'
+GROUP BY sells.price
+ORDER BY cnt DESC;</code></pre>
+      </section>
+
+
+      <section class="step" id="sql4" data-x="48500" data-y="3000" data-z="4000">
+        <code>supplier(<u>suppID</u>, name)</code><br/>
+        <code>product(<u>prodID</u>, name)</code><br/>
+        <code>component(<u>compID</u>, name)</code><br/>
+        <code>composed_by(<u>prodID, compID</u>, quantity)</code><br/>
+        <code>sells(<u>suppID, compID</u>, price)</code><br/>
+
+         <asq-exercise max-num-submissions="3" assessment="self">
+             <asq-code-q  theme="monokai" mode="sql" font-size="0.8em">
+               <asq-stem><p> Select the IDs of the supplier(s) selling component 10 at the cheapest price.</p></asq-stem>
+<code>SELECT ...
+FROM ...
+WHERE ...
+</code>
+             </asq-code-q>
+        </asq-exercise>
+      </section>
+
+      <section class="step" id="sql4_s" data-x="48500" data-y="4000" data-z="4000">
+        <code>supplier(<u>suppID</u>, name)</code><br/>
+        <code>product(<u>prodID</u>, name)</code><br/>
+        <code>component(<u>compID</u>, name)</code><br/>
+        <code>composed_by(<u>prodID, compID</u>, quantity)</code><br/>
+        <code>sells(<u>suppID, compID</u>, price)</code><br/>
+        <pre style="color: blue;"><code class="sql">SELECT suppID
+FROM sells AS s0
+WHERE compID = 10
+AND NOT EXISTS (
+  SELECT *
+  FROM sells AS s1
+  WHERE (s1.price < s0.price)
+  AND s1.compID = 10
+);</code></pre>
+      </section>
+
+        <section class="step" id="info" data-x="50500" data-y="-4000" data-z="4000">
+        <code>supplier(<u>suppID</u>, name)</code><br/>
+        <code>product(<u>prodID</u>, name)</code><br/>
+        <code>component(<u>compID</u>, name)</code><br/>
+        <code>composed_by(<u>prodID, compID</u>, quantity)</code><br/>
+        <code>sells(<u>suppID, compID</u>, price)</code><br/>
+
+         <asq-exercise max-num-submissions="3" assessment="self">
+             <asq-code-q  theme="monokai" mode="sql" font-size="0.8em">
+               <asq-stem><p> Given the following information about the suppliers:
+                   <br> Abdel: Available
+                   <br> All other suppliers: Not available
+                   <br>Display all component names and whether their supplier is available or not.
+                       </p></asq-stem>
+<code>SELECT ...
+    CASE...
+FROM ... JOIN ...
+</code>
+             </asq-code-q>
+        </asq-exercise>
+      </section>
+
+      <section class="step" id="info_rep" data-x="52500" data-y="4000" data-z="4000">
+        <code>supplier(<u>suppID</u>, name)</code><br/>
+        <code>product(<u>prodID</u>, name)</code><br/>
+        <code>component(<u>compID</u>, name)</code><br/>
+        <code>composed_by(<u>prodID, compID</u>, quantity)</code><br/>
+        <code>sells(<u>suppID, compID</u>, price)</code><br/>
+        <pre style="color: blue;"><code class="sql">SELECT  component.name,
+      CASE  supplier.name
+         WHEN 'Abdel' THEN 'available'
+         ELSE 'Not available'
+      END  as availability
+FROM (sells join supplier
+on sells.suppid=supplier.suppid join component
+on component.compid=sells.compid); </code></pre>
+      </section>
+
+
+
+
+
+
+
+      <section class="step" id="feedback" data-x="52500" data-y="8000" data-z="6000">
+          <h1>That's all, folks!</h1>
+          <ul>
+            <li><em>Constructive</em> feedback on this interactive presentation is much appreciated.</li>
+            <li>If you have problems with the homework or you don't understand something contact me.</li>
+            <li> Special thanks to Dr. Alberto Tonon and Vassilis Triglianos for their help with this presentation! </li>
+          </ul>
+          <i> Contact: <a href="mailto:abdel@exascale.info">abdel@exascale.info</a></i>
+      </section>
+
+
+    </div>
+    <script src="js/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="js/impress.js"></script>
+    <script src="js/main.js"></script>
+
+  </body>
+</html>

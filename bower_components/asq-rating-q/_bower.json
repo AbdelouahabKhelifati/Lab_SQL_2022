@@ -1,0 +1,32 @@
+{
+  "name": "asq-rating-q",
+  "homepage": "https://github.com/ASQ-USI-Elements/asq-rating-q",
+  "authors": [
+    "Vasileios Triglianos <triglian@gmail.com>"
+  ],
+  "description": "ASQ rating question element",
+  "keywords": [
+    "ASQ"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.2.3",
+    "asq-base": "ASQ-USI-Elements/asq-base#master",
+    "test-fixture": "PolymerElements/test-fixture#^1.0.3",
+    "webcomponentsjs": "^0.7.18",
+    "paper-toggle-button": "PolymerElements/paper-toggle-button#^1.1.1"
+  },
+  "devDependencies": {
+    "web-component-tester": "Polymer/web-component-tester#^4.2.0",
+    "iron-component-page": "polymerElements/iron-component-page#^1.1.4"
+  },
+  "_release": "fcf39624b9",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "fcf39624b96bc32eee4d72fb81434dd8b52a7619"
+  },
+  "_source": "git://github.com/ASQ-USI-Elements/asq-rating-q.git",
+  "_target": "master",
+  "_originalSource": "ASQ-USI-Elements/asq-rating-q"
+}

@@ -1,0 +1,186 @@
+<link rel="import" href="../../../polymer/polymer.html">
+<link rel="import" href="../../../asq-base/asq-base.html">
+<link rel="import" href="../../../paper-styles/default-theme.html">
+<link rel="import" href="../../../paper-behaviors/paper-inky-focus-behavior.html">
+<link rel="import" href="../../../paper-progress/paper-progress.html">
+<link rel="import" href="../../../paper-behaviors/paper-checked-element-behavior.html">
+<link rel="import" href="../../../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../../paper-styles/color.html">
+
+<!--
+`asq-option-presenter` is use to show to the presenter. 
+
+##### Examples
+
+    <asq-option role="presenter" multi>A checkbox option</asq-option>
+    <asq-option role="presenter" disabled>A disabled radio option</asq-option>
+
+
+### Styling progress bar:
+
+To change the active progress bar color:
+
+    asq-option-presenter {
+       --asq-option-presenter-progress-active-color: #e91e63;
+    }
+
+
+To change the progress bar background color:
+
+    asq-option-presenter {
+      --asq-option-presenter-progress-container-color: #64ffda;
+    }
+
+
+The followings are available for styling (presenter's view) ( adapted from PolymerElements/paper-progress):
+
+Custom property                             | Description                                 | Default
+--------------------------------------------|---------------------------------------------|----------
+--asq-option-presenter-progress-container-color            | Mixin applied to container                  | --google-grey-300
+--asq-option-presenter-progress-transition-duration        | Duration of the transition                  | 0.008s
+--asq-option-presenter-progress-transition-timing-function | The timing function for the transition      | ease
+--asq-option-presenter-progress-transition-delay           | delay for the transition                    | 0s
+--asq-option-presenter-progress-active-color               | The color of the active bar                 | --google-green-500
+--asq-option-presenter-progress-disabled-active-color      | The color of the active bar if disabled     | --google-grey-500
+--asq-option-presenter-progress-height                     | The height of the progress bar              | 4px
+
+
+@element asq-option-presenter
+@demo demo/index.html
+@group ASQ Elements
+@blurb Element acting as options in multichoice questions.
+@homepage http://github.com/ASQ-USI-Elements/asq-option-presenter
+-->
+<dom-module id="asq-option-presenter">
+  <template>
+
+    <style include="iron-flex iron-positioning">
+
+      #progress{
+        width: 100%;
+        margin-right: 20px;
+
+        --paper-progress-container-color: var(--asq-option-presenter-progress-container-color, --google-grey-300);
+
+        --paper-progress-active-color: var(--asq-option-presenter-progress-active-color, --google-green-500);
+
+        --paper-progress-disabled-active-color: var(--asq-option-presenter-progress-disabled-active-color, --google-grey-500);
+
+
+        --paper-progress-height: var(--asq-option-presenter-progress-height, 4px);
+
+        --paper-progress-transition-duration: var(--asq-option-presenter-progress-transition-duration, 0.08s);
+
+        --paper-progress-transition-delay: var(--asq-option-presenter-progress-transition-delay, 0s);
+        @apply(--asq-option-progress);
+      }
+
+
+      #progress-wrapper{
+        position: relative;
+        @apply(--layout-horizontal);
+        @apply(--asq-option-progress-wrapper);
+      }
+
+      #progress-num{
+        position: absolute;
+        top: -0.5em;
+        right: 0;
+        @apply(--asq-option-progress-number);
+      }
+
+    </style>
+
+
+    <div id="label"><content></content></div>
+    <div id="progress-wrapper" hidden$="{{!displayProgress}}">
+      <paper-progress id="progress" value="[[progressValue]]" max="[[progressMax]]"></paper-progress>
+      <div id="progress-num">[[progressValue]]</div>
+    </div>
+
+  </template>
+
+    
+
+
+  <script>
+    Polymer({
+      is: 'asq-option-presenter',
+
+      behaviors: [
+        ASQ.asqElementBehavior
+      ],
+
+      hostAttributes: {
+        'aria-checked': false,
+        tabindex: 0
+      },
+
+      properties: {
+
+
+        /**
+         * Decide the mode, single or multi.
+         */
+        multi: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          reflectToAttribute: true
+        },
+        /**
+         * Fired when the checked state changes due to user interaction.
+         *
+         * @event change
+         */
+
+        /**
+         * Fired when the checked state changes.
+         *
+         * @event asq-option-presenter-change
+         */
+
+         ariaActiveAttribute: {
+           value: 'aria-checked'
+         },
+
+         /**
+          * To set the value of progress bar in presenter view.
+          */
+         progressValue: {
+          type: Number,
+          value: 0,
+          notify: true,
+          reflectToAttribute: true
+        },
+
+        /**
+         * To set the max value of progress bar in presenter view.
+         */
+        progressMax: {
+          type: Number,
+          value: 100,
+          notify: true,
+          reflectToAttribute: true
+        },
+
+        /**
+        * Whether to display progress or not.
+        */
+        displayProgress: {
+          type: Boolean,
+          value: false,
+          notify: true 
+        }
+      },
+
+
+      attached: function() {
+        this._isReady = true;
+      }
+
+    })
+  </script>
+
+</dom-module>

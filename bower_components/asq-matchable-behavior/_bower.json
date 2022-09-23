@@ -1,0 +1,38 @@
+{
+  "name": "asq-matchable-behavior",
+  "homepage": "https://github.com/ASQ-USI-Elements/asq-matchable-behavior",
+  "authors": [
+    "Vasileios Triglianos <triglian@gmail.com>",
+    "Zhenfei Nie <youyis2fox@gmail.com>"
+  ],
+  "description": "Matchable behaviors.",
+  "keywords": [
+    "ASQ"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "polymer": "Polymer/Polymer#^1.2.1",
+    "asq-base": "ASQ-USI-Elements/asq-base#master"
+  },
+  "ignore": [
+    "index.js",
+    "lib",
+    "package.json",
+    "node_modules",
+    ".npmignore",
+    "test/server"
+  ],
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.1.4",
+    "web-component-tester": "Polymer/web-component-tester#^4.2.0"
+  },
+  "_release": "05b798fa05",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "05b798fa0598e8009e4ec9152cc0c8feb035e97b"
+  },
+  "_source": "git://github.com/ASQ-USI-Elements/asq-matchable-behavior.git",
+  "_target": "master",
+  "_originalSource": "ASQ-USI-Elements/asq-matchable-behavior"
+}

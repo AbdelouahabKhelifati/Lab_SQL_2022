@@ -1,0 +1,602 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../paper-progress/paper-progress.html">
+<link rel="import" href="../paper-styles/color.html">
+<link rel="import" href="asq-confidence.html">
+<link rel="import" href="../asq-base/asq-base.html">
+
+<!--
+`asq-exercise` groups ASQ `question types`. Every question should be be a child of an `asq-exercise` element. An `asq-exercise` element should conatin one ore more  `ASQ questions`. `asq-exercise` takes care of submitting and displaying progress for a group of questions.
+
+Example:
+
+    <asq-exercise 
+      <asq-stem><h2>Exercise 1-1</h2></asq-stem>
+      <asq-multi-choice-q>
+        <asq-stem><h3>Select a functional language.</h3></asq-stem>
+        <asq-option checked>Haskell</asq-option>
+        <asq-option>C</asq-option>
+        <asq-option>Python</asq-option>
+        <asq-option>Perl</asq-option>
+      </asq-multi-choice-q>
+    </asq-exercise>
+
+
+    <asq-exercise max-num-submissions="3">
+      <asq-stem><h2>Exercise 1</h2></asq-stem>
+      <asq-multi-choice-q multi>
+        <asq-stem><h3>Official languages of Switzerland</h3></asq-stem>
+        <asq-option>English</asq-option>
+        <asq-option>French</asq-option>
+        <asq-option>German</asq-option>
+        <asq-option>Italian</asq-option>
+        <asq-option>Rumantsch</asq-option>
+      </asq-multi-choice-q>
+    </asq-exercise>
+
+Different users will see different UI according to their **role**. There are several types of roles, `viewer`, `presenter` and `TA`.
+
+###Styling `submit` and `edit` buttons (in viewer's view):
+
+To change the color and background color of `submit` button:
+
+    asq-exercise {
+      --asq-exercise-submit-button-color: white;
+      --asq-exercise-submit-button-background-color: #388E3C;
+    }
+
+
+To change the color and background color of `edit` button:
+
+    asq-exercise {
+      --asq-exercise-edit-button-color: white;
+      --asq-exercise-edit-button-background-color: #FF7043;
+    }
+
+To change the color and background color of `submit` button when disabled (a.k.a submitsions are not allowed):
+
+    asq-exercise {
+      --asq-exercise-submit-button-disabled-color: #E0E0E0;
+      --asq-exercise-submit-button-background-disabled-color: #424242;
+    }
+
+Custom property                                        | Description                                     | Default
+-------------------------------------------------------|-------------------------------------------------|----------
+--asq-exercise-submit-button-color                     | The color of submit button                      | white
+--asq-exercise-submit-button-background-color          | The background color of submit button           | #388E3C
+--asq-exercise-edit-button-color                       | The color of edit button                        | white
+--asq-exercise-edit-button-background-color            | The background color of edit button             | #FF7043
+--asq-exercise-submit-button-disabled-color            | The color of submit button when disabled        | #E0E0E0
+--asq-exercise-submit-button-background-disabled-color | The background color of submit button disabled  | #424242
+
+
+### Styling progress bar (in presenter's view):
+
+To change the active progress bar color:
+
+    asq-exercise {
+       --asq-exercise-progress-active-color: #e91e63;
+    }
+
+
+To change the progress bar background color:
+
+    asq-exercise {
+      --asq-exercise-progress-container-color: #64ffda;
+    }
+
+
+The followings are available for styling (presenter's view) ( adapted from PolymerElements/paper-progress):
+
+Custom property                                    | Description                                 | Default
+---------------------------------------------------|---------------------------------------------|----------
+--asq-exercise-progress-container-color            | Mixin applied to container                  | --google-grey-300
+--asq-exercise-progress-transition-duration        | Duration of the transition                  | 0.008s
+--asq-exercise-progress-transition-timing-function | The timing function for the transition      | ease
+--asq-exercise-progress-transition-delay           | delay for the transition                    | 0s
+--asq-exercise-progress-active-color               | The color of the active bar                 | --google-green-500
+--asq-exercise-progress-disabled-active-color      | The color of the active bar if disabled     | --google-grey-500
+--asq-exercise-progress-height                     | The height of the progress bar              | 4px
+
+@element asq-exercise
+@demo demo/index.html
+@group ASQ Elements
+@blurb Element Container for all ASQ `question types`.
+@homepage http://github.com/ASQ-USI-Elements/asq-exercise
+-->
+  
+<dom-module id="asq-exercise">
+  <template>
+    <style include="iron-flex"> 
+
+      :host{
+        display: block;
+      }
+
+      #footer{
+        @apply(--layout-horizontal);
+        @apply(--layout-end-justified);
+      }
+
+      paper-progress {
+        margin-right: 5px;
+      }
+   
+      .submit-button {
+        color: var(--asq-exercise-submit-button-color, white);
+        background-color: var(--asq-exercise-submit-button-background-color, #388E3C);
+      }
+
+      .submit-button[disabled] {
+        color: var(--asq-exercise-submit-button-disabled-color, #E0E0E0);
+        background-color: var(--asq-exercise-submit-button-background-disabled-color, #424242);
+      }
+      
+      .edit-button {
+        color: var(--asq-exercise-edit-button-color, white);
+        background-color: var(--asq-exercise-edit-button-background-color, #FF7043);
+      }
+
+      paper-progress {
+        --paper-progress-container-color: var(--asq-exercise-progress-container-color, --google-grey-300);
+
+        --paper-progress-active-color: var(--asq-exercise-progress-active-color, --google-green-500);
+
+        --paper-progress-disabled-active-color: var(--asq-exercise-progress-disabled-active-color, --google-grey-500);
+
+        --paper-progress-height: var(--asq-exercise-progress-height, 4px);
+
+        --paper-progress-transition-duration: var(--asq-exercise-progress-transition-duration, 0.08s);
+
+        --paper-progress-transition-delay: var(--asq-exercise-progress-transition-delay, 0s);
+      }
+
+      
+      /* no need to print the buttons 
+      fixme: when polymer support media queries for custom properties we can just apply a property to the footer and have the user provide the media query on their rules */
+      @media print{
+        #footer {
+          @apply(--layout-invisible);
+        }
+      }
+
+
+     
+    </style>
+
+    <template is="dom-if" if="{{hasRole(role, roles.VIEWER)}}" restamp>
+      <article>
+        <div>
+          <content select="asq-stem"></content>
+        </div>
+        <div>
+          <content></content>
+        </div>
+        <footer id="footer">
+          <div style="height: 100%;">
+            <template is="dom-if" if="{{confidence}}">
+              <asq-confidence id="confidence" disabled="{{disabled}}"></asq-confidence>
+            </template>
+            <paper-button id="submit-button" class="submit-button" on-tap="submit" raised="true" disabled="{{_computeDisabled(disabled, submittable)}}">Submit</paper-button>
+            <paper-tooltip for="submit-button">{{_submittableMessages}}</paper-tooltip>
+            <paper-button id="edit-button" hidden="" class="edit-button" on-tap="_onEdit" raised="true">Edit</paper-button> 
+          </div>   
+        </footer>
+      </article>
+    </template>
+
+
+    <template is="dom-if" if="{{hasRole(role, roles.PRESENTER)}}" restamp>
+      <article>
+        <div>
+          <content select="asq-stem"></content>
+        </div>
+        <div>
+          <content></content>
+        </div>
+        <footer id="footer">
+          <div class="layout horizontal center">
+            <!-- TODO: cannot declartively define `max`. The `max` shouldn't 
+            be zero when trying to change `value`. Otherwise, it wouldn't change.
+            The `restorePresenter happens before viewerConnected`. But it requires
+            to change the max before changing the value. 
+            -->
+            <paper-progress value="[[submissionsNum]]"></paper-progress>
+            <div>
+              <span>[[submissionsNum]]</span>
+              <span>/<span>
+              <span>[[connectedViewersNum]]</span>
+            </div>
+          </div>
+        </footer>
+      </article>
+    </template> 
+
+    <template is="dom-if" if="{{hasRole(role, roles.TA)}}" restamp>
+      <article class="asq-exercise">
+        <div>
+          <content select="asq-stem"></content>
+        </div>
+        <div>
+          <content></content>
+        </div>
+        <footer id="footer">
+          <div>
+            <asq-progress></asq-progress>
+          </div>
+        </footer>
+      </article>
+    </template> 
+
+  </template>
+  <script>
+    Polymer({
+      is: 'asq-exercise',
+
+      behaviors: [ASQ.asqElementBehavior],
+
+ 
+      properties: {
+
+        /**
+         * Disable or enable the element. Changes will be also
+         * propagated to inner propagated elements.
+         */
+        disabled: { 
+          type: Boolean,
+          value: false,
+          notify: true, 
+          observer: '_disabledChanged',
+          reflectToAttribute: true
+        },
+
+        /**
+         * Display confidence stars in the exercise
+         */
+        confidence: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
+        },
+
+
+        /**
+         * The maximum submission attempts allowed.
+         */
+        maxNumSubmissions: { 
+          type:Number,
+          value: 1,
+          notify: true, 
+          observer: 'refresh',
+          reflectToAttribute: true
+        },
+
+        /**
+         * assessment type
+         */
+        assessment: {
+          type: String,
+          value: 'auto',
+          notify: true, 
+          reflectToAttribute: true
+        },
+
+
+        /**
+         * Counter for submission times. 
+         *
+         * @attribute submissions
+         * @type number
+         * @default 0
+         */
+        submissions: {
+          type: Number,
+          value: 0,
+          observer: 'refresh'
+        },
+
+         /**
+         * Counter for submission times. 
+         *
+         * @attribute submissions
+         * @type number
+         * @default 0
+         */
+        _initialized: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+
+        remainingAttempts: {
+          computed: '_computeRemainingAttempts(maxNumSubmissions, submissions)'
+        },
+
+        submittable: {
+          computed: '_computeSubmittable(remainingAttempts)'
+        },
+
+        _submittableMessages: {
+          computed: '_computeSubmittableMessages(remainingAttempts)'
+        },
+
+
+        connectedViewersNum: {
+          type: Number,
+          value: 0,
+          notify: true
+        },
+
+        submissionsNum: {
+          type: Number,
+          value: 0,
+          notify: true
+        },
+
+      },
+
+      _computeDisabled: function(disabled, submittable) {
+        return disabled && !submittable
+      },
+
+      _computeSubmittable: function (remainingAttempts) {
+        if ( remainingAttempts > 0 ) return true;
+        return false
+      },
+
+      _computeRemainingAttempts: function(maxNumSubmissions, submissions) {
+        if ( maxNumSubmissions < 0 ) 
+          return Number.MAX_VALUE;
+
+        var remainingAttempts = maxNumSubmissions - submissions;
+
+        if ( remainingAttempts <= 0)
+          return 0;
+
+        return remainingAttempts;
+      },
+
+      _computeSubmittableMessages: function(remainingAttempts) {
+        if ( remainingAttempts === Number.MAX_VALUE ) 
+          return 'Unlimited attempts';
+
+        if ( remainingAttempts <= 0)
+          return 'No further attempt allowed';
+
+        if ( remainingAttempts === 1 ) 
+          return 'Last chance'
+
+        return remainingAttempts + ' attempts left';
+      },
+
+      created: function () {
+        document.addEventListener('asq-ready', function (evt) {
+          try {
+            this._subscribeToEvents(evt.detail.asqEventBus);
+          } catch (err) {
+            console.debug('failed to _subscribeToEvents');
+          }
+        }.bind(this));
+      },
+      /**
+       * Exercise is interested in two events: `asq:question_type`, which is emitted 
+       * when answer is submitted successfully, and `asq:question_type_edit`, which is emitted
+       * when editing answer.
+       *
+       */
+      _subscribeToEvents: function (eventBus) {
+        eventBus.on('asq:question_type', this._onQuestionType.bind(this));
+        eventBus.on('asq:connected-clients', this._onConnectedClients.bind(this));
+        eventBus.on('asq:submitted', this._onSubmitted.bind(this));
+        eventBus.on('asq:update_live_presentation_settings', this._onUpdateSettings.bind(this));
+      },
+
+      _onUpdateSettings: function (evt) {
+        if (evt.scope === 'exercise' && evt.exerciseId == this.uid) {
+          var settings = evt.settings;
+          Object.keys(settings).forEach(function (key, index) {
+            if (this.hasAttributes(key)) {
+              this[key] = settings[key];
+            }
+          }, this);
+        }
+      },
+      
+      _onQuestionType: function (evt) {
+        if (evt && evt.questionType && evt.questionType == 'asq-exercise') {
+          if (evt.type == 'progress') {
+            this._onProgress(evt.exercise);
+          } else if (evt.type == 'restorePresenter') {
+            if (this.role !== this.roles.PRESENTER)
+              return;
+            this._onRestorePresenter(evt);
+          } else if (evt.type == 'restoreViewer') {
+            if (this.role !== this.roles.VIEWER)
+              return;
+            this._onRestoreViewer(evt);
+          }
+        }
+      },
+      
+      _onRestorePresenter: function (evt) {
+        evt.exercises.forEach(function (ex) {
+          this._onProgress(ex);
+        }.bind(this));
+      },
+
+      
+      _onRestoreViewer: function (evt) {
+        evt.exercises.forEach(function (ex) {
+          if (ex.uid !== this.uid)
+            return;
+          this.submissions = ex.submissionNum;
+          if (this.confidence && this.$$('#confidence')) {
+            this.$$('#confidence').confidence = ex.confidence;
+          }
+          // since the id exists it means we have answered
+        }.bind(this));
+      },
+
+      _onProgress: function (exercise) {
+        if (exercise.uid !== this.uid)
+          return;
+        if (this.role !== this.roles.PRESENTER)
+          return;
+        this._updateProgress(exercise.submissions);
+      },
+
+      _updateProgress: function (submissions) {
+        //necessary: the max and value should always be changed together
+        // to avoid the 'bug' (or 'special feature') of paper-progress.
+        
+        if ( submissions.length > this.connectedViewersNum ) {
+          this.connectedViewersNum = submissions.length
+        }
+        this.$$('paper-progress').max = this.connectedViewersNum;
+        this.submissionsNum = submissions.length;
+      },
+
+      _onConnectedClients: function (evt) {
+        if (this.role !== this.roles.PRESENTER)
+          return;
+
+        this.connectedViewersNum = evt.connectedViewers.length;
+        this.$$('paper-progress').max = this.connectedViewersNum;
+        this.$$('paper-progress').value = this.submissionsNum;
+      },
+
+      _onSubmitted: function (evt) {
+        if (evt.exerciseUid == this.uid) {
+
+        }
+      },
+
+      /**
+       * The `asq-submit` event is fired whenever function `submit` is called.
+       *
+       * @event asq-submit
+       *
+       *     detail: {
+       *       submission: // all collected submissions
+       *       confidence: // the confidence level
+       *     }
+       */
+      /**
+       * The `submit` method will submit the answer to a wrapped 'asq-exercise' instance. 
+       * 
+       * Only useful when the `role` is <b>viewer</b>.
+       *
+       * @method submit
+       */
+      submit: function () {
+        if (this.role !== this.roles.VIEWER)
+          return;
+        if (this.disabled)
+          return;
+        if (!this.submittable)
+          return;
+
+
+        var submission = this._getSubmission();
+        this.submissions += 1;
+
+        if ( this.submittable ) {
+          this.$$('#submit-button').hidden = true;
+          this.$$('#edit-button').hidden = false;
+        }
+
+        //submitted confidence will be null if not this.confidence is false
+        var confidence;
+        if (this.confidence) {
+          confidence = this.$$('#confidence').confidence;
+        }
+        this.fire('asq-submit', {
+          exerciseUid: this.uid,
+          submission: submission,
+          confidence: confidence
+        });
+
+        this.disabled = true;
+      },
+
+      refresh: function(_initialized) {
+        if ( !_initialized ) 
+          return;
+      },
+
+      /**
+       * Get all questions inside this exercise.
+       *
+       * @method _getQuestions
+       */
+      _getQuestions: function () {
+        return Polymer.dom(this).childNodes.filter(function (el) {
+          return el.isASQElement && el.isASQQuestionTypeElement;
+        });
+      },
+
+      /**
+       * Get all submission of all questions.
+       *
+       * @method _getSubmission
+       */
+      _getSubmission: function () {
+        var questions = this._getQuestions();
+        var sumissions = [];
+        questions.forEach(function (elem, index) {
+          sumissions.push(elem.submit());
+        });
+        return sumissions;
+      },
+
+      // event handler for tapping the *edit* button.
+      _onEdit: function () {
+        this.$$('#edit-button').hidden = true;
+        this.$$('#submit-button').hidden = false;
+        this.disabled = false;
+
+        this.fire('exercise-edit', {
+          exerciseUid: this.uid
+        });
+      },
+
+      /**
+       * The `asq-disabled` event is fired when the value of *disabled* is
+       * changed. This may be caused by clicking the *submit* button.
+       *
+       * @event asq-disabled
+       *
+       *      detail: { 
+       *        disabled: this.disabled
+       *      }
+       *    
+       **/
+      _disabledChanged: function () {
+        if (this.role === 'presenter') return;
+        this.fire('asq-disabled', { disabled: this.disabled });
+        this._toggleInnerElements(this.disabled);
+      },
+
+      _toggleInnerElements: function (flag) {
+        // propagate value of *disabled*
+        this._getQuestions().forEach(function(x){
+          x.disabled = flag;
+        });
+      },
+
+      attached: function () {
+        Polymer.dom.flush()
+
+        this._initialized = true;
+      },
+
+      // hasRole: function (role, candidate) {
+      //   return role == candidate;
+      // }
+      
+    });
+  </script>
+</dom-module>

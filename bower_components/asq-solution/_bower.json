@@ -1,0 +1,29 @@
+{
+  "name": "asq-solution",
+  "homepage": "https://github.com/ASQ-USI-Elements/asq-solution",
+  "authors": [
+    "Vasileios Triglianos <triglian@gmail.com>",
+    "Zhenfei Nie <youyis2fox@gmail.com>"
+  ],
+  "description": "ASQ solution element",
+  "keywords": [
+    "ASQ"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.2.1"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.1.4",
+    "web-component-tester": "Polymer/web-component-tester#^4.2.0"
+  },
+  "_release": "2444cbc3f8",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "2444cbc3f8656e68757a051c3a38cb211d1895d0"
+  },
+  "_source": "git://github.com/ASQ-USI-Elements/asq-solution.git",
+  "_target": "master",
+  "_originalSource": "ASQ-USI-Elements/asq-solution"
+}

@@ -1,0 +1,22 @@
+{
+  "name": "asq-base",
+  "homepage": "https://github.com/ASQ-USI-Elements/asq-base",
+  "authors": [
+    "Vasileios Triglianos <triglian@gmail.com>",
+    "Zhenfei Nie <youyis2fox@gmail.com>"
+  ],
+  "description": "Basic functionality for ASQ elements.",
+  "keywords": [
+    "ASQ"
+  ],
+  "license": "MIT",
+  "_release": "91de903eda",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "91de903edab6599fcfd370cb9eb814fa5f6a009d"
+  },
+  "_source": "git://github.com/ASQ-USI-Elements/asq-base.git",
+  "_target": "master",
+  "_originalSource": "ASQ-USI-Elements/asq-base"
+}
