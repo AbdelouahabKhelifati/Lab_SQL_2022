@@ -373,7 +373,7 @@ AND composed_by.quantity >= 2;</code></pre>
 
         <asq-exercise max-num-submissions="3" assessment="self">
              <asq-code-q  theme="monokai" mode="sql" font-size="0.8em">
-               <asq-stem><p>Show the histogram of the prices of the components sold by "NERV", i.e., count how many products are sold by NERV for each price, ordered by decreasing price.</p></asq-stem>
+               <asq-stem><p>Show the histogram of the prices of the components sold by "abdel", i.e., count how many components are sold by abdel for each price, ordered by decreasing price.</p></asq-stem>
 <code>SELECT ...
 FROM ...
 WHERE ...
@@ -394,7 +394,7 @@ ORDER BY... ;
         <pre style="color: blue;"><code class="sql">SELECT sells.price, count(*) AS cnt
 FROM sells JOIN supplier
   ON sells.suppID = supplier.suppID
-WHERE supplier.name = 'NERV'
+WHERE supplier.name = 'abdel'
 GROUP BY sells.price
 ORDER BY cnt DESC;</code></pre>
       </section>
